@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+<!-- NuGet package info -->
+    <PackageId>Common.Logging</PackageId> <!-- The unique identifier for your package -->
+    <Version>1.0.0</Version> <!-- The version of your package -->
+    <Authors>David Yaari</Authors> <!-- The author of the package -->
+    <Company>David Yaari</Company> <!-- The company that owns the package -->
+
+    <!-- Optional: These properties are not required, but they are recommended -->
+    <Description>
+      This package provides additional functionality for the IHostBuilder interface in .NET applications, specifically for configuring logging with Serilog and Elasticsearch.
+
+      The UseSerilogWithElasticsearch method is an extension method for IHostBuilder that sets up Serilog as the logging provider and configures it to send logs to an Elasticsearch instance. The URL of the Elasticsearch instance is retrieved from the application's configuration.
+
+      In addition, a console logger is set up for logging any configuration errors that might occur during this setup process.
+
+      In addition the Common.Logging.OpenTelemetry namespace provides a method AddTelemetryConfiguration to configure OpenTelemetry tracing for an application. This method sets up various instrumentation sources, and configures console and Jaeger exporters for the tracing data. The serviceName parameter is used to label the traces and to specify the source of the traces.
+    </Description> <!-- A description of the package -->
+    <PackageTags>Logging</PackageTags> <!-- Tags that help users discover your package -->
+    <PackageProjectUrl>https://github.com/david-yaari/snapgram</PackageProjectUrl> <!-- The URL of the project -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression> <!-- The license for the package -->
+
+    <!-- Add these lines to include symbols in the NuGet package -->
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.22.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.7.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.5.1" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.7.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.7.1" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.7.1" />
+    <!-- <PackageReference Include="Serilog" Version="3.1.1" /> -->
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageReference Include="Serilog.Enrichers.AspNetCore.HttpContext" Version="1.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="6.0.0" />
+  </ItemGroup>
+
+</Project>
