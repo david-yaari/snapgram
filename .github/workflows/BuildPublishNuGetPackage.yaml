@@ -14,13 +14,13 @@ jobs:
 
     env:
       PROJECT_PATH: infrastructure/Common.Logging/src/Common.Logging
-
+      PROJECT_PATH_TEST: infrastructure/Common.Logging/src/Common.Logging.Tests
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x' # adjust this to your project's .NET version
 
@@ -31,7 +31,7 @@ jobs:
         run: dotnet build ${{ env.PROJECT_PATH }}/Common.Logging.csproj --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test src/Common.Logging.Tests/Common.Logging.Tests.csproj --no-restore
+        run: dotnet test ${{ env.PROJECT_PATH_TEST }}//Common.Logging.Tests.csproj --no-restore
 
       - name: Increment NuGet version
         run: |
