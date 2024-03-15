@@ -13,11 +13,11 @@
 
     <!-- Optional: These properties are not required, but they are recommended -->
     <Description>
-      This package provides additional functionality for the IHostBuilder interface in .NET applications, specifically for configuring logging with Serilog and Elasticsearch.
+      This package provides additional functionality for the IHostBuilder interface in .NET applications, specifically for configuring logging with Serilog and Elasticsearch.&#xD;&#xA;
 
-      The UseSerilogWithElasticsearch method is an extension method for IHostBuilder that sets up Serilog as the logging provider and configures it to send logs to an Elasticsearch instance. The URL of the Elasticsearch instance is retrieved from the application's configuration.
+      The UseSerilogWithElasticsearch method is an extension method for IHostBuilder that sets up Serilog as the logging provider and configures it to send logs to an Elasticsearch instance. The URL of the Elasticsearch instance is retrieved from the application's configuration.&#xD;&#xA;
 
-      In addition, a console logger is set up for logging any configuration errors that might occur during this setup process.
+      In addition, a console logger is set up for logging any configuration errors that might occur during this setup process.&#xD;&#xA;
 
       In addition the Common.Logging.OpenTelemetry namespace provides a method AddTelemetryConfiguration to configure OpenTelemetry tracing for an application. This method sets up various instrumentation sources, and configures console and Jaeger exporters for the tracing data. The serviceName parameter is used to label the traces and to specify the source of the traces.
     </Description> <!-- A description of the package -->
