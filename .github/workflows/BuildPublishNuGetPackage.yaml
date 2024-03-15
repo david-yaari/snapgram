@@ -30,6 +30,9 @@ jobs:
       - name: Build
         run: dotnet build ${{ env.PROJECT_PATH }}/Common.Logging.csproj --configuration Release --no-restore
 
+      - name: Restore test dependencies
+        run: dotnet restore ${{ env.PROJECT_PATH_TEST }}/Common.Logging.Tests.csproj
+
       - name: Test
         run: dotnet test ${{ env.PROJECT_PATH_TEST }}/Common.Logging.Tests.csproj --no-restore
 
