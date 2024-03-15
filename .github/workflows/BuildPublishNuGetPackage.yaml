@@ -31,9 +31,10 @@ jobs:
         run: dotnet test src/Common.Logging.Tests/Common.Logging.Tests.csproj --no-restore
 
       - name: Increment NuGet version
-        uses: jenschude/nuget-version-action@v1.0.1
-        with:
-          path: src/Common.Logging/Common.Logging.csproj
+        run: |
+          CURRENT_VERSION=$(grep -oP '(?<=<Version>).*?(?=</Version>)' src/Common.Logging/Common.Logging.csproj)
+          NEW_VERSION=$(echo "$CURRENT_VERSION" | awk -F. -v OFS=. '{$NF++;print}')
+          sed -i "s/<Version>$CURRENT_VERSION/<Version>$NEW_VERSION/g" src/Common.Logging/Common.Logging.csproj
 
       - name: Pack
         run: dotnet pack src/Common.Logging/Common.Logging.csproj --configuration Release --no-build --include-symbols --output out --include-source
