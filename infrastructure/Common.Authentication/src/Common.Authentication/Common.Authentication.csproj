@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+<PropertyGroup>
   <!-- NuGet package info -->
     <PackageId>Common.Authentication</PackageId> <!-- The unique identifier for your package -->
      <MinVerTagPrefix>v</MinVerTagPrefix> <!-- The version of your package -->

@@ -15,6 +15,7 @@ jobs:
     env:
       PROJECT_PATH: infrastructure/Common.Authentication/src/Common.Authentication
       PROJECT_PATH_TEST: infrastructure/Common.Authentication/src/Common.Authentication.Tests
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
