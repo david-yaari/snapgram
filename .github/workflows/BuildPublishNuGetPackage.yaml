@@ -36,12 +36,6 @@ jobs:
       - name: Test
         run: dotnet test ${{ env.PROJECT_PATH_TEST }}/Common.Logging.Tests.csproj --no-restore
 
-      - name: Increment NuGet version
-        run: |
-          CURRENT_VERSION=$(grep -oP '(?<=<Version>).*?(?=</Version>)' ${{ env.PROJECT_PATH }}/Common.Logging.csproj)
-          NEW_VERSION=$(echo "$CURRENT_VERSION" | awk -F. -v OFS=. '{$NF++;print}')
-          sed -i "s/<Version>$CURRENT_VERSION/<Version>$NEW_VERSION/g" ${{ env.PROJECT_PATH }}/Common.Logging.csproj
-
       - name: Pack
         run: dotnet pack ${{ env.PROJECT_PATH }}/Common.Logging.csproj --configuration Release --no-build --include-symbols --output out --include-source
 
