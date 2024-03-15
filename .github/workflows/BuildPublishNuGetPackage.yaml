@@ -31,7 +31,7 @@ jobs:
         run: dotnet build ${{ env.PROJECT_PATH }}/Common.Logging.csproj --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test ${{ env.PROJECT_PATH_TEST }}//Common.Logging.Tests.csproj --no-restore
+        run: dotnet test ${{ env.PROJECT_PATH_TEST }}/Common.Logging.Tests.csproj --no-restore
 
       - name: Increment NuGet version
         run: |
