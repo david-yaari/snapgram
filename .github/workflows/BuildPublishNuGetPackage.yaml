@@ -12,6 +12,9 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
+    env:
+      PROJECT_PATH: infrastructure/Common.Logging/src/Common.Logging
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,10 +25,10 @@ jobs:
           dotnet-version: '8.0.x' # adjust this to your project's .NET version
 
       - name: Restore dependencies
-        run: dotnet restore src/Common.Logging/Common.Logging.csproj
+        run: dotnet restore ${{ env.PROJECT_PATH }}/Common.Logging.csproj
 
       - name: Build
-        run: dotnet build src/Common.Logging/Common.Logging.csproj --configuration Release --no-restore
+        run: dotnet build ${{ env.PROJECT_PATH }}/Common.Logging.csproj --configuration Release --no-restore
 
       - name: Test
         run: dotnet test src/Common.Logging.Tests/Common.Logging.Tests.csproj --no-restore
