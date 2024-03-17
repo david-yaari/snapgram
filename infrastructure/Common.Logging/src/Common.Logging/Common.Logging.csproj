@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 
 <!-- NuGet package info -->
-    <PackageId>Common.Logging</PackageId> <!-- The unique identifier for your package -->
+    <PackageId>Snapchat.Common.Logging</PackageId> <!-- The unique identifier for your package -->
      <MinVerTagPrefix>v</MinVerTagPrefix> <!-- The version of your package -->
     <Authors>David Yaari</Authors> <!-- The author of the package -->
     <Company>David Yaari</Company> <!-- The company that owns the package -->
