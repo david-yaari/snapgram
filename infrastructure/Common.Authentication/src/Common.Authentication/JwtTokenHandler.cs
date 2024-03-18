@@ -1,11 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Common.Authentication.Models;
 using Common.Authentication.Repositories;
+using System.Security.Cryptography;
 
 namespace Common.Authentication.JwtAuthentication;
 
@@ -68,7 +68,7 @@ public class JwtTokenHandler
         var claimsIdentity = new ClaimsIdentity(new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Name, authenticationRequest.UserName),
-                new Claim("Role", userAccount!.Role!)
+                new Claim("RoleId", userAccount!.RoleId!)
             });
 
         var sigingCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature);
@@ -86,9 +86,19 @@ public class JwtTokenHandler
 
         return new AuthenticationResponse
         {
-            UserName = userAccount.UserName,
+            UserId = userAccount.UserId,
             JwtToken = jwtToken,
-            JwtTokenExpiryTime = (int)tokenExpiryTime.Subtract(DateTime.Now).TotalSeconds
+            JwtTokenExpiryTime = (int)tokenExpiryTime.Subtract(DateTime.Now).TotalSeconds,
+            RefreshToken = GenerateSecureToken(32) // Generate a 32-byte refresh token
         };
+    }
+
+    public string GenerateSecureToken(int length)
+    {
+        var byteArr = new byte[length];
+        RandomNumberGenerator.Fill(byteArr);
+
+        return Convert.ToBase64String(byteArr);
+
     }
 }

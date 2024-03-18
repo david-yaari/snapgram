@@ -2,6 +2,6 @@ POST https://localhost:5501/authenticate HTTP/1.1
 content-type: application/json
 
 {
-	"UserName": "",
+	"UserName": "user",
 	"Password": "user"
 }

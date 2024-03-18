@@ -1,13 +1,15 @@
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-    const currentUser = request.cookies.get('currentUser')?.value
+    const session = request.cookies.get('session')?.value
+    console.log('session', session)
+    console.log('request.nextUrl.pathname', request.nextUrl.pathname)
 
-    if (currentUser && !request.nextUrl.pathname.startsWith('/')) {
+    if (session && !request.nextUrl.pathname.startsWith('/')) {
         return Response.redirect(new URL('/', request.url))
     }
 
-    if (!currentUser && !request.nextUrl.pathname.startsWith('/login')) {
+    if (!session && !request.nextUrl.pathname.startsWith('/login')) {
         return Response.redirect(new URL('/login', request.url))
     }
 }
