@@ -36,7 +36,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="MongoDb.Driver" Version="2.24.0" />
-    <PackageReference Include="Snapchat.Common.Logging" Version="1.0.1-alpha.0.3" />
   </ItemGroup>
 
   <ItemGroup>
