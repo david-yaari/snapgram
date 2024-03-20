@@ -1,104 +1,40 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Common.Authentication.Models;
-using Common.Authentication.Repositories;
-using System.Security.Cryptography;
+﻿// using System.IdentityModel.Tokens.Jwt;
+// using System.Security.Claims;
+// using System.Text;
+// using Microsoft.Extensions.Logging;
+// using Microsoft.IdentityModel.Tokens;
+// using Common.Authentication.Models;
+// using Common.Authentication.Repositories;
+// using System.Security.Cryptography;
 
-namespace Common.Authentication.JwtAuthentication;
+// namespace Common.Authentication.JwtAuthentication;
 
-public class JwtTokenHandler
-{
-    public static string JwtSecurityKey
-    {
-        get
-        {
-            string key = Environment.GetEnvironmentVariable("JWT_SECURITY_KEY") ?? string.Empty;
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                throw new ArgumentException("JWT_SECURITY_KEY cannot be null or whitespace.", nameof(JwtSecurityKey));
-            }
-            return key;
-        }
-    }
-    private readonly UserRepository _userRepository;
-    private readonly ILogger<JwtTokenHandler> _logger;
-    private const int JWT_TOKEN_EXPIRY_IN_MINUTES = 20;
+// public class JwtTokenHandler
+// {
 
-    public JwtTokenHandler(
-        UserRepository repo,
-        ILogger<JwtTokenHandler> logger
-    )
-    {
-        _userRepository = new UserRepository();
-        _logger = logger;
-    }
+//     private readonly UserRepository _userRepository;
+//     private readonly ILogger<JwtTokenHandler> _logger;
+//     private const int JWT_TOKEN_EXPIRY_IN_MINUTES = 20;
 
-    public async Task<AuthenticationResponse?> GenerateJwtToken(AuthenticationRequest authenticationRequest)
-    {
-
-        if (string.IsNullOrWhiteSpace(authenticationRequest.UserName))
-        {
-            throw new ArgumentException("Username cannot be null or whitespace.", nameof(authenticationRequest.UserName));
-        }
-        if (string.IsNullOrWhiteSpace(authenticationRequest.Password))
-        {
-            throw new ArgumentException("Password cannot be null or whitespace.", nameof(authenticationRequest.Password));
-        }
-
-        UserAccount? userAccount = await _userRepository.GetUserAsync(authenticationRequest.UserName, authenticationRequest.Password);
-
-        foreach (var property in typeof(UserAccount).GetProperties())
-        {
-            if (property.PropertyType == typeof(string))
-            {
-                string value = (string?)property.GetValue(userAccount) ?? string.Empty;
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException($"{property.Name} cannot be null or whitespace.", property.Name);
-                }
-            }
-        }
+//     public JwtTokenHandler(
+//         UserRepository repo,
+//         ILogger<JwtTokenHandler> logger
+//     )
+//     {
+//         _userRepository = new UserRepository();
+//         _logger = logger;
+//     }
 
 
-        var tokenExpiryTime = DateTime.Now.AddMinutes(JWT_TOKEN_EXPIRY_IN_MINUTES);
-        var tokenKey = Encoding.ASCII.GetBytes(JwtSecurityKey);
-        var claimsIdentity = new ClaimsIdentity(new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Name, authenticationRequest.UserName),
-                new Claim("RoleId", userAccount!.RoleId!)
-            });
 
-        var sigingCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature);
+//     public string GenerateSecureToken(int length)
+//     {
+//         var byteArr = new byte[length];
+//         RandomNumberGenerator.Fill(byteArr);
 
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = claimsIdentity,
-            Expires = tokenExpiryTime,
-            SigningCredentials = sigingCredentials
-        };
+//         return Convert.ToBase64String(byteArr);
 
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        var jwtToken = tokenHandler.WriteToken(token);
+//     }
 
-        return new AuthenticationResponse
-        {
-            UserId = userAccount.UserId,
-            JwtToken = jwtToken,
-            JwtTokenExpiryTime = (int)tokenExpiryTime.Subtract(DateTime.Now).TotalSeconds,
-            RefreshToken = GenerateSecureToken(32) // Generate a 32-byte refresh token
-        };
-    }
 
-    public string GenerateSecureToken(int length)
-    {
-        var byteArr = new byte[length];
-        RandomNumberGenerator.Fill(byteArr);
-
-        return Convert.ToBase64String(byteArr);
-
-    }
-}
+// }

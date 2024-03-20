@@ -9,44 +9,56 @@ using Microsoft.Extensions.DependencyInjection;
 using Common.Authentication.JwtAuthentication;
 using Common.Authentication.Repositories;
 using Authentication.Service;
-using Authentication.Service.Endpoints;
+using Common.DbEventStore.MongoDB;
+using Common.DbEventStore.Settings.Service;
+using Common.DbEventStore.MassTransit;
+using Authentication.Entities;
+using Authentication.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddCors();
+var configuration = builder.Configuration;
+var services = builder.Services;
 
 // Add services to the container.
-builder.Services.AddAuthorization();
+services.AddCors();
+
+// Add services to the container.
+services.AddAuthorization();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 // Add Logging
-builder.Host.UseSerilogWithElasticsearch(builder.Configuration);
+builder.Host.UseSerilogWithElasticsearch(configuration);
 
 var serviceName = "Authentication";
 
 // Configure telemetry
-builder.Services.AddOpenTelemetry()
+services.AddOpenTelemetry()
     .WithTracing(builder => builder
     .AddTelemetryConfiguration(serviceName));
 
 
-builder.Services
+services
     .AddSingleton<UserRepository>()
     .AddProblemDetails()
     .AddExceptionHandler<GlobalExceptionHandler>();
 
-builder.Services.AddSingleton<JwtTokenHandler, JwtTokenHandler>();
+services.AddSingleton<JwtTokenHandler, JwtTokenHandler>();
 
-builder.Services.AddHttpLogging(logging =>
+services.AddHttpLogging(logging =>
 {
     // Configure logging options here...
     logging.LoggingFields = HttpLoggingFields.All;
 });
+
+services.AddMongo()
+.AddMongoRepository<RefreshToken>(configuration[$"{nameof(ServiceSettings)}:{nameof(ServiceSettings.ItemsCollectionName)}"]!)
+.AddMassTransitWithRabbitMq();
 
 var app = builder.Build();
 

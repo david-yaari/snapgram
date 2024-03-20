@@ -1,8 +1,18 @@
-﻿namespace Common.Authentication.Models;
+﻿// using System.ComponentModel.DataAnnotations;
+// using Common.Authentication.Attributes;
 
-public class AuthenticationRequest
-{
-    public string? UserName { get; set; }
-    public string? Email { get; set; }
-    public string? Password { get; set; }
-}
+// namespace Common.Authentication.Models;
+
+// public class AuthenticationRequest
+// {
+//     public string? UserName { get; set; }
+
+//     [RequiredNonEmpty]
+//     [EmailAddress]
+//     [MinLength(4)]
+//     public string? Email { get; set; }
+
+//     [RequiredNonEmpty]
+//     [MinLength(8)]
+//     public string? Password { get; set; }
+// }

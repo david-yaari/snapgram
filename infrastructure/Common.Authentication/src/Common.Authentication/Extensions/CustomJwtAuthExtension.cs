@@ -21,7 +21,7 @@ namespace Common.Authentication.Extensions
                 jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtTokenHandler.JwtSecurityKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtSecurityKey.Create)),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
