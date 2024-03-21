@@ -4,7 +4,8 @@ namespace Authentication.Entities;
 
 public class User : IEntity
 {
-    public Guid Id { get; set; }
+    public Guid tenantId { get; set; }
+    public Guid id { get; set; }
     public string? userName { get; set; }
     public string? hashedPassword { get; set; }
     public string? salt { get; set; }

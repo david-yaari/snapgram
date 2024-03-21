@@ -1,8 +1,6 @@
 ﻿using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 using Authentication.AuthenticationValidators;
 using Authentication.Entities;
-using Authentication.Helpers;
 using Authentication.Models;
 using Common.Authentication.JwtAuthentication;
 using Common.Authentication.Models;
@@ -31,6 +29,7 @@ public class UserAuthenticationService
 
     public async Task<User?> GetUserByEmail(string email, string password)
     {
+        var existingTenants = await _usersRepository.GetAllAsync();
         var existingRoles = await _rolesRepository.GetAllAsync();
         if (!existingRoles.Any())
         {
@@ -38,12 +37,12 @@ public class UserAuthenticationService
             {
                 new Role
                 {
-                    Id = Guid.NewGuid(),
+                    id = Guid.NewGuid(),
                     name = "Admin"
                 },
                 new Role
                 {
-                    Id = Guid.NewGuid(),
+                    id = Guid.NewGuid(),
                     name = "User"
                 }
             };
@@ -57,7 +56,7 @@ public class UserAuthenticationService
             var hash = PasswordHelper.HashPassword(password, salt);
             var defaultUser = new User
             {
-                Id = Guid.NewGuid(),
+                id = Guid.NewGuid(),
                 userName = "admin",
                 hashedPassword = hash,
                 salt = salt, // Add the salt to the user
@@ -87,7 +86,7 @@ public class UserAuthenticationService
     {
         var jwtTokenRequest = new JwtTokenRequest
         {
-            UserId = user.Id,
+            UserId = user.id,
             RolesId = user.roleIds
         };
 

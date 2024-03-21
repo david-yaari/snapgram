@@ -58,9 +58,12 @@ services.AddHttpLogging(logging =>
     logging.LoggingFields = HttpLoggingFields.All;
 });
 
+var collectionName = configuration[$"{nameof(ServiceSettings)}:{nameof(ServiceSettings.ItemsCollectionName)}"]!;
+
 services.AddMongo()
-.AddMongoRepository<User>(configuration[$"{nameof(ServiceSettings)}:{nameof(ServiceSettings.ItemsCollectionName)}"]!)
-.AddMongoRepository<Role>(configuration[$"{nameof(ServiceSettings)}:{nameof(ServiceSettings.ItemsCollectionName)}"]!)
+.AddMongoRepository<Tenant>(collectionName)
+.AddMongoRepository<User>(collectionName)
+.AddMongoRepository<Role>(collectionName)
 .AddMassTransitWithRabbitMq();
 
 

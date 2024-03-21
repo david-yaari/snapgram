@@ -5,6 +5,7 @@ namespace Common.DbEventStore
     public interface IRepository<T> where T : IEntity
     {
         // Define the methods that the repository should implement.
+        Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllAsync(Guid tenantId);
         Task<IEnumerable<T>> GetAllAsync(Guid tenantId, Expression<Func<T, bool>> filter);
         Task<T> GetAsync(Guid tenantId, Guid id);

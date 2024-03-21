@@ -20,6 +20,11 @@ namespace Common.DbEventStore.MongoDB
             _logger = logger;
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _collection.Find(FilterDefinition<T>.Empty).ToListAsync();
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync(Guid tenantId)
         {
             FilterDefinition<T> filter = filterBuilder.Eq(entity => entity.tenantId, tenantId);
