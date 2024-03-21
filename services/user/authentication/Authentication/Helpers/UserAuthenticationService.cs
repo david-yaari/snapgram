@@ -10,12 +10,14 @@ namespace Authentication.Helpers;
 
 public class UserAuthenticationService
 {
+    private readonly IRepository<Tenant> _tenantsRepository;
     private readonly IRepository<User> _usersRepository;
     private readonly IRepository<Role> _rolesRepository;
     private readonly JwtTokenGenerator _jwtTokenGenerator;
 
-    public UserAuthenticationService(IRepository<User> usersRepository, IRepository<Role> rolesRepository, JwtTokenGenerator jwtTokenGenerator)
+    public UserAuthenticationService(IRepository<Tenant> tenantsRepository, IRepository<User> usersRepository, IRepository<Role> rolesRepository, JwtTokenGenerator jwtTokenGenerator)
     {
+        _tenantsRepository = tenantsRepository;
         _usersRepository = usersRepository;
         _rolesRepository = rolesRepository;
         _jwtTokenGenerator = jwtTokenGenerator;
@@ -29,7 +31,17 @@ public class UserAuthenticationService
 
     public async Task<User?> GetUserByEmail(string email, string password)
     {
-        var existingTenants = await _usersRepository.GetAllAsync();
+        var existingTenants = await _tenantsRepository.GetAllAsync();
+
+        if (!existingTenants.Any())
+        {
+            var seeder = new Seed(_tenantsRepository);
+            seeder.Tenants();
+
+            existingTenants = await _tenantsRepository.GetAllAsync();
+            var firstTenant = await _tenantsRepository.FirstOrDefaultAsync();
+
+        }
         var existingRoles = await _rolesRepository.GetAllAsync();
         if (!existingRoles.Any())
         {

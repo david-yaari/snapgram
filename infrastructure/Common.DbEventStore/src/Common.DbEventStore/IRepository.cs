@@ -10,6 +10,8 @@ namespace Common.DbEventStore
         Task<IEnumerable<T>> GetAllAsync(Guid tenantId, Expression<Func<T, bool>> filter);
         Task<T> GetAsync(Guid tenantId, Guid id);
         Task<T> GetAsync(Guid tenantId, Expression<Func<T, bool>> filter);
+        Task<T> FirstOrDefaultAsync();
+        Task<T> FirstOrDefaultAsync(Guid tenantId);
         Task CreateAsync(T entity);
         Task CreateManyAsync(IEnumerable<T> entities);
         Task UpdateAsync(T entity);

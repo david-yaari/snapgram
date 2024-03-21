@@ -55,6 +55,17 @@ namespace Common.DbEventStore.MongoDB
             return await _collection.Find(combinedFilter).FirstOrDefaultAsync();
         }
 
+        public async Task<T> FirstOrDefaultAsync()
+        {
+            return await _collection.Find(FilterDefinition<T>.Empty).FirstOrDefaultAsync();
+        }
+
+        public async Task<T> FirstOrDefaultAsync(Guid tenantId)
+        {
+            var tenantFilter = Builders<T>.Filter.Eq(e => e.tenantId, tenantId);
+            return await _collection.Find(tenantFilter).FirstOrDefaultAsync();
+        }
+
         public async Task CreateAsync(T entity)
         {
             if (entity == null)
