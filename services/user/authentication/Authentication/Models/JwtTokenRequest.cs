@@ -1,7 +1,7 @@
-﻿namespace Authentication.Models;
+﻿// namespace Authentication.Models;
 
-public class JwtTokenRequest
-{
-    public Guid? UserId { get; set; }
-    public List<Guid>? RolesId { get; set; }
-}
+// public class JwtTokenRequest
+// {
+//     public Guid? UserId { get; set; }
+//     public List<Guid>? RolesId { get; set; }
+// }

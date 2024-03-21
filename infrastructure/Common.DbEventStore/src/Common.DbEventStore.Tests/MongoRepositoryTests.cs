@@ -27,7 +27,7 @@ public class MongoRepositoryTests
     {
         var mockCursor = new Mock<IAsyncCursor<User>>();
         // Arrange
-        var user = new User { Name = "Test", Email = "test@example.com" };
+        var user = new User { name = "Test", email = "test@example.com" };
 
         // Act
         await _repository.CreateAsync(user);

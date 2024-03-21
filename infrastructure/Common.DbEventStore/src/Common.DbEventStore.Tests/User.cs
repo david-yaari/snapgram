@@ -4,8 +4,9 @@ namespace Common.DbEventStore.Tests;
 
 public class User : IEntity
 {
-    public Guid Id { get; set; }
-    public string? Name { get; set; }
-    public string? Email { get; set; }
+    public Guid tenantId { get; set; }
+    public Guid id { get; set; }
+    public string? name { get; set; }
+    public string? email { get; set; }
     // other properties...
 }

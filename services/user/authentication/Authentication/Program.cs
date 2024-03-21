@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.HttpLogging;
 using OpenTelemetry.Trace;
 using Microsoft.Extensions.DependencyInjection;
 using Common.Authentication.JwtAuthentication;
-using Common.Authentication.Repositories;
 using Authentication.Service;
 using Common.DbEventStore.MongoDB;
 using Common.DbEventStore.Settings.Service;
 using Common.DbEventStore.MassTransit;
 using Authentication.Entities;
 using Authentication.Extensions;
+using Authentication;
+using Authentication.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,11 +45,12 @@ services.AddOpenTelemetry()
 
 
 services
-    .AddSingleton<UserRepository>()
     .AddProblemDetails()
     .AddExceptionHandler<GlobalExceptionHandler>();
 
-services.AddSingleton<JwtTokenHandler, JwtTokenHandler>();
+builder.Services.AddSingleton<JwtTokenGenerator>();
+builder.Services.AddSingleton<JwtTokenValidator>();
+builder.Services.AddSingleton<UserAuthenticationService>();
 
 services.AddHttpLogging(logging =>
 {
@@ -57,10 +59,21 @@ services.AddHttpLogging(logging =>
 });
 
 services.AddMongo()
-.AddMongoRepository<RefreshToken>(configuration[$"{nameof(ServiceSettings)}:{nameof(ServiceSettings.ItemsCollectionName)}"]!)
+.AddMongoRepository<User>(configuration[$"{nameof(ServiceSettings)}:{nameof(ServiceSettings.ItemsCollectionName)}"]!)
+.AddMongoRepository<Role>(configuration[$"{nameof(ServiceSettings)}:{nameof(ServiceSettings.ItemsCollectionName)}"]!)
 .AddMassTransitWithRabbitMq();
 
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+}
 
 app.Logger.LogInformation(5, "Application started using...");
 

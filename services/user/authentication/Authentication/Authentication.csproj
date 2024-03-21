@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Snapchat.Common.Authentication" Version="1.0.1-alpha.0.3" />
+    <PackageReference Include="Snapchat.Common.Authentication" Version="1.0.1-alpha.0.8" />
     <PackageReference Include="Snapchat.Common.Logging" Version="1.0.1-alpha.0.3" />
     <PackageReference Include="Snapchat.Common.DbEventStore" Version="1.0.1-alpha.0.7" />
     <!-- <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.2" />
