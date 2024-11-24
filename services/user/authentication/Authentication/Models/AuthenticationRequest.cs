@@ -5,6 +5,9 @@ namespace Authentication.Models;
 
 public class AuthenticationRequest
 {
+    [Required]
+    public Guid? TenantId { get; set; }
+
     [RequiredNonEmpty]
     [EmailAddress]
     [MinLength(4)]

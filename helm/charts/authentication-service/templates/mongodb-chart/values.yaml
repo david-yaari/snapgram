@@ -1,0 +1,6 @@
+mongodb:
+  deploymentName: authentication-mongodb-deployment
+  serviceName: mongodb-authentication-service
+  containerName: mongodb-container
+  volumeName: authentication-service-mongodb-data
+  pvcName: authentication-service-mongodb-pvc

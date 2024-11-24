@@ -35,4 +35,5 @@ public class UseSerilogWithElasticsearchTests
         var logger = host.Services.GetService<ILogger<UseSerilogWithElasticsearchTests>>();
         Assert.NotNull(logger);
     }
+    
 }

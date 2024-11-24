@@ -1,0 +1,11 @@
+elasticsearch:
+  name: elasticsearch
+
+kibana:
+  name: kibana
+
+rabbitmq:
+  name: rabbitmq
+
+seq:
+  name: seq

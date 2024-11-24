@@ -1,0 +1,4 @@
+apiVersion: v2
+name: elasticsearch-chart
+description: A Helm chart for Elasticsearch
+version: 0.1.0

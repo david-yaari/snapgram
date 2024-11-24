@@ -11,8 +11,8 @@ namespace Authentication.Helpers;
 public class UserAuthenticationService
 {
     private readonly IRepository<Tenant> _tenantsRepository;
-    private readonly IRepository<User> _usersRepository;
     private readonly IRepository<Role> _rolesRepository;
+    private readonly IRepository<User> _usersRepository;
     private readonly JwtTokenGenerator _jwtTokenGenerator;
 
     public UserAuthenticationService(IRepository<Tenant> tenantsRepository, IRepository<User> usersRepository, IRepository<Role> rolesRepository, JwtTokenGenerator jwtTokenGenerator)
@@ -29,58 +29,47 @@ public class UserAuthenticationService
         return validator.Validate(authenticationRequest);
     }
 
-    public async Task<User?> GetUserByEmail(string email, string password)
+    public async Task<User?> GetUserByEmail(Guid? tenantId, string email, string password)
     {
+        var currentTenantId = tenantId ?? Guid.Empty;
+
         var existingTenants = await _tenantsRepository.GetAllAsync();
 
         if (!existingTenants.Any())
         {
-            var seeder = new Seed(_tenantsRepository);
+            var seeder = new Seed(_tenantsRepository, _rolesRepository, _usersRepository);
+
             seeder.Tenants();
 
-            existingTenants = await _tenantsRepository.GetAllAsync();
             var firstTenant = await _tenantsRepository.FirstOrDefaultAsync();
 
-        }
-        var existingRoles = await _rolesRepository.GetAllAsync();
-        if (!existingRoles.Any())
-        {
-            var defaultRoles = new List<Role>
-            {
-                new Role
-                {
-                    id = Guid.NewGuid(),
-                    name = "Admin"
-                },
-                new Role
-                {
-                    id = Guid.NewGuid(),
-                    name = "User"
-                }
-            };
+            currentTenantId = firstTenant.tenantId;
 
-            await _rolesRepository.CreateManyAsync(defaultRoles);
+            seeder.Roles(currentTenantId);
+            var adminRole = await _rolesRepository.GetAsync(currentTenantId, r => r.name == "Admin");
+            seeder.Users(currentTenantId, adminRole.id);
         }
-        var existingUsers = await _usersRepository.GetAllAsync();
-        if (!existingUsers.Any())
-        {
-            var salt = PasswordHelper.GenerateSalt();
-            var hash = PasswordHelper.HashPassword(password, salt);
-            var defaultUser = new User
-            {
-                id = Guid.NewGuid(),
-                userName = "admin",
-                hashedPassword = hash,
-                salt = salt, // Add the salt to the user
-                email = "admin@my-company.com",
-                roleIds = new List<Guid> { /* Add any default roles here */ }
-            };
 
-            await _usersRepository.CreateAsync(defaultUser);
-        }
+        // var existingUsers = await _usersRepository.GetAllAsync();
+        // if (!existingUsers.Any())
+        // {
+        //     var salt = PasswordHelper.GenerateSalt();
+        //     var hash = PasswordHelper.HashPassword(password, salt);
+        //     var defaultUser = new User
+        //     {
+        //         id = Guid.NewGuid(),
+        //         userName = "admin",
+        //         hashedPassword = hash,
+        //         salt = salt, // Add the salt to the user
+        //         email = "admin@my-company.com",
+        //         roleIds = new List<Guid> { /* Add any default roles here */ }
+        //     };
+
+        //     await _usersRepository.CreateAsync(defaultUser);
+        // }
 
         Expression<Func<User, bool>> filter = u => u.email == email;
-        var users = await _usersRepository.GetAllAsync(filter);
+        var users = await _usersRepository.GetAllAsync(currentTenantId, filter);
         var user = users.FirstOrDefault();
         if (user != null && user.salt != null)
         {

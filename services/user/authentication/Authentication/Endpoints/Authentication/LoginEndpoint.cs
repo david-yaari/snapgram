@@ -43,7 +43,7 @@ public class LoginEndpoint
             return Results.BadRequest(new { error = "Invalid AuthenticationRequest." });
         }
 
-        var user = await _userAuthenticationService.GetUserByEmail(authenticationRequest.Email!, authenticationRequest.Password!);
+        var user = await _userAuthenticationService.GetUserByEmail(authenticationRequest.TenantId, authenticationRequest.Email!, authenticationRequest.Password!);
         if (user == null)
         {
             _logger.LogWarning(6, "User not found: {Remote Address} {Local Address} {Email}", remoteAddress, localAddress, authenticationRequest.Email);

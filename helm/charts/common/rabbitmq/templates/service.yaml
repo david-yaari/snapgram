@@ -1,0 +1,14 @@
+# templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: { { .Values.rabbitmq.name } }
+spec:
+  type: LoadBalancer
+  ports:
+    - name: amqp
+      port: 5672
+    - name: management
+      port: 15672
+  selector:
+    app: { { .Values.rabbitmq.name } }

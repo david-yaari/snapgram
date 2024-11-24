@@ -1,0 +1,11 @@
+# templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: { { .Values.mongoExpress.name } }
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8081
+  selector:
+    app: { { .Values.mongoExpress.name } }

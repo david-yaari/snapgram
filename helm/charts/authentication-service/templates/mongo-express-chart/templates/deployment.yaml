@@ -1,0 +1,20 @@
+# templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: { { .Values.mongoExpress.name } }
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: mongo-express
+          image: mongo-express:latest
+          env:
+        - name: ME_CONFIG_MONGODB_SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: mongodb-configmap
+              key: database_url
+          ports:
+            - containerPort: 8081

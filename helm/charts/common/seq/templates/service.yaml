@@ -1,0 +1,16 @@
+# templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: { { .Values.seq.name } }
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: ingestion
+      port: 5341
+      targetPort: 5341
+  selector:
+    app: { { .Values.seq.name } }
